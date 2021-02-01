@@ -1,4 +1,5 @@
 ## TODO
+- [x] change all passwords and username for db and change token for bot
 - [ ] make response object from message for individual tickers
 - [ ] make watchlist object
 - [ ] private watchlist for each user (using mongoDB)

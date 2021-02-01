@@ -34,11 +34,17 @@ def get_ticker(message):
             new_response = Response('desc', res)
             return new_response
         elif option == 'high':
-            res = tick_info.get('dayHigh')
+            res = {
+                'ticker': tick,
+                'dayHigh': tick_info.get('dayHigh')
+            }
             new_response = Response('high', res)
             return new_response
         elif option == 'low':
-            res = tick_info.get('dayLow')
+            res = {
+                'ticker': tick,
+                'dayLow': tick_info.get('dayLow')
+            }
             new_response = Response('low', res)
             return new_response
         else:
