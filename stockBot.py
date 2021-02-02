@@ -1,23 +1,20 @@
 import discord
 import os
+from asyncio import TimeoutError
 from dotenv import load_dotenv
 from mongoengine import connect
 
 # --------------
 # module imports
 # --------------
-from tick_requests.ticker import get_ticker
 from watchlist.watch import watchCall
+from tick_requests.ticker import get_ticker
+from database.crud import createUser
 
 # -----------------
 # discord bot setep
 # -----------------
 client = discord.Client()
-
-# ----------
-# db connect
-# ----------
-db = connect('stock-bot-db', host=os.getenv('DB_CONNECT_URL'))
 
 # ---------
 # functions
@@ -53,8 +50,25 @@ async def on_message(message):
         # watch stocks
         msg_content = message.content
         user_id = message.author.id
-        watch_obj = watchCall(msg_content, user_id)
-        await channel.send(watch_obj.res)
+        username = message.author
+        res = watchCall(msg_content, user_id, username)
+        if res == 'userDNE':
+            await channel.send(f"the user {username} does not exist, would you like to make one? [y/n]")
+
+            def check(m):
+                return m.content == 'y'and m.channel == message.channel
+
+            try:
+                msg = await client.wait_for('message', check=check, timeout=30.0)
+            except TimeoutError:
+                await channel.send(f"The user {username} was not created due to timeout")
+            else:
+                createUser(message.author.id)
+                await channel.send(f"creating user for {username}, you may now add items to your watch list.")
+        elif res != 'error':
+            await channel.send(res.res) # send the response
+        else:
+            await channel.send("There was an error, please make sure to keep your format such that:\n$watch <option> <tickers>")
 
 def main():
     # load .env
