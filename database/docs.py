@@ -7,6 +7,7 @@ import datetime
 
 class User(Document):
     u_id = StringField(max_length=200, required=True, unique=True)
+    watch_list = ReferenceField('WatchList', reverse_delete_rule=CASCADE)
     date_created = DateTimeField(default=datetime.datetime.utcnow)
 
 class WatchList(Document):
