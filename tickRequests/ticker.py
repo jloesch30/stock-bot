@@ -6,7 +6,7 @@ class Response():
         self.res = res
 
 
-def get_ticker(message):
+def getTicker(message):
     options = ['ask', 'desc', 'high', 'low']
     split_string = message.split(' ')
     try:
@@ -53,3 +53,13 @@ def get_ticker(message):
     except Exception as e:
         print(e)
         return -1
+
+def validateTickers(ticks):
+    for tick in ticks:
+        try:
+            t = yf.Ticker(tick)
+            t.actions
+        except Exception as e:
+            print(e)
+            return False, tick
+    return True, None

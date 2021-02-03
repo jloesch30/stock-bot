@@ -8,7 +8,7 @@ from mongoengine import connect
 # module imports
 # --------------
 from watchlist.watch import watchCall
-from tick_requests.ticker import get_ticker
+from tickRequests.ticker import getTicker
 from database.crud import createUser
 
 # -----------------
@@ -29,7 +29,7 @@ async def on_message(message):
     if message.content.startswith('$stock'):
         msg_content = message.content
         try:
-            response = get_ticker(msg_content)
+            response = getTicker(msg_content)
             if response == -1:
                 raise Exception
             if response.option == 'ask':
@@ -61,12 +61,16 @@ async def on_message(message):
             try:
                 msg = await client.wait_for('message', check=check, timeout=30.0)
             except TimeoutError:
-                await channel.send(f"The user {username} was not created due to timeout")
+                await channel.send(f"The user {username} was not created due to timout or decline")
             else:
                 createUser(message.author.id)
                 await channel.send(f"creating user for {username}, you may now add items to your watch list.")
+        
+        # successful call
         elif res != 'error':
             await channel.send(res.res) # send the response
+
+        # unknown error
         else:
             await channel.send("There was an error, please make sure to keep your format such that:\n$watch <option> <tickers>")
 
