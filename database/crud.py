@@ -28,8 +28,11 @@ def getWatchNews(db_user):
 
 def updateWatchList(user_id, option, ticks):
     if option == 'add':
+        print('add option initialized')
         for tick in ticks:
-            u = User.objects(u_id=user_id)
+            print(f'entering ticks, user_id is {user_id}, option is {option}, and ticks are {ticks}')
+            u = User.objects.get(u_id=user_id)
+            print('updatingWatchList', u)
             u.watch_list.update(push_all__tickers=ticks)
     elif option == 'remove':
         u = User.objects(u_id=user_id)

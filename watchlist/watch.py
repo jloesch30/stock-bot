@@ -12,7 +12,6 @@ def watchCall(msg_content, user_id, username):
     options = ['price', 'news', 'add', 'remove'] # TODO: impliment options
     msg_lst = msg_content.split(' ')
     db_user = getUser(user_id)
-    print('db_user', db_user)
     if db_user == -1:
         return 'userDNE'
 
