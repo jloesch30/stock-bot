@@ -63,12 +63,20 @@ async def on_message(message):
             except TimeoutError:
                 await channel.send(f"The user {username} was not created due to timout or decline")
             else:
-                createUser(message.author.id)
+                createUser(message.author.id, message.author)
                 await channel.send(f"creating user for {username}, you may now add items to your watch list.")
         
         # successful call
         elif res != 'error':
-            await channel.send(res.res) # send the response
+            if res.embed == True:
+                print(res.res)
+                pause = input()
+                embed = discord.Embed()
+                embed.title = res.res['title']
+                embed.description = res.res[0]['body_text']
+                await channel.send(embed=embed)
+            else:
+                await channel.send(res.res) # send the response
 
         # unknown error
         else:

@@ -5,5 +5,5 @@ import os
 # db connect
 # ----------
 print('Connecting to DB')
-db = connect('db', host=os.getenv('DB_CONNECT_URL'))
+connect('mydb', host="mongodb+srv://jloesch30:NkUB2z7wxRrDdmaI@cluster0.rkkey.mongodb.net/mydb?retryWrites=true&w=majority")
 print('Connection successful')

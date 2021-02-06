@@ -1,4 +1,3 @@
-from . import db
 from mongoengine import *
 
 # ----------------
@@ -6,43 +5,25 @@ from mongoengine import *
 # ----------------
 from database.docs import User, WatchList
 
-def gettWatchMorning(db_user):
-    pass
-
-def getWatchAfternoon(db_user):
-    pass
-
 # return an array of tickers
 def getWatchList(db_user):
     try:
         return db_user.watch_list.tickers
     except Exception as e:
         print(e)
-        return []
+        return -1
 
-def getWatchPrice(db_user):
-    pass
-
-def getWatchNews(db_user):
-    pass
-
-def updateWatchList(user_id, option, ticks):
+def updateWatchList(db_user, option, ticks):
     if option == 'add':
-        print('add option initialized')
-        for tick in ticks:
-            print(f'entering ticks, user_id is {user_id}, option is {option}, and ticks are {ticks}')
-            u = User.objects.get(u_id=user_id)
-            print('updatingWatchList', u)
-            u.watch_list.update(push_all__tickers=ticks)
+        WatchList.objects(user=db_user).update(add_to_set__tickers=ticks)
     elif option == 'remove':
-        u = User.objects(u_id=user_id)
-        u.watch_list.tickers.update(pull_all__tickers=ticks)
+        WatchList.objects(user=db_user).update(pull_all__tickers=ticks)
         
 
 def getUser(user_id):
     try:
         db_user = User.objects.get(u_id=user_id)
-        print(db_user)
+        print(db_user.date_created)
     except Exception as e:
         print('User DNE')
         print('Creating user')
@@ -50,16 +31,15 @@ def getUser(user_id):
     else:
         return db_user
 
-def createUser(user_id):
-    print(type(user_id))
+def createUser(user_id, user_name):
+    print(type(user_id), type(user_name),user_name)
     new_watch_list = WatchList()
     new_user = User(
         u_id=user_id,
+        user_name=str(user_name),
         watch_list=new_watch_list
     )
-
     new_watch_list.save()
     new_user.save()
-    
-
+    new_watch_list.update(set__user=new_user)
     print('user created')

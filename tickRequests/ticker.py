@@ -63,3 +63,7 @@ def validateTickers(ticks):
             print(e)
             return False, tick
     return True, None
+
+def getTickerPrice(tick):
+    t = yf.Ticker(tick)
+    return (t.info.get('ask')) 
