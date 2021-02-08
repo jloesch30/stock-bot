@@ -5,11 +5,11 @@ from scrape.finviz import finvizReport
 
 
 class WatchResponse():
-    def __init__(self, dateTime=None, userName=None, res=None, embed=False):
+    def __init__(self, dateTime=None, userName=None, res=None, file=False):
         self.userName = userName
         self.res = res  # this will be a string that is sent
         self.dateTime = dateTime
-        self.embed = embed
+        self.file = file
 
 
 def watchCall(msg_content, user_id, username):
@@ -76,10 +76,9 @@ def watchCall(msg_content, user_id, username):
 
         return new_watch_obj
 
-    elif option == 'news':
+    elif option == 'news': # send a xlms report in a message
+        new_watch_obj.file = True
         tickers = getWatchList(db_user)
-        embed_dict = finvizReport(tickers)
-        new_watch_obj.res = embed_dict
-        new_watch_obj.embed = True
+        finvizReport(tickers) # create the report
         return new_watch_obj
         

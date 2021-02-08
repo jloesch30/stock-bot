@@ -1,5 +1,6 @@
 import discord
 import os
+import time
 from asyncio import TimeoutError
 from dotenv import load_dotenv
 from mongoengine import connect
@@ -68,13 +69,18 @@ async def on_message(message):
         
         # successful call
         elif res != 'error':
-            if res.embed == True:
-                print(res.res)
-                pause = input()
-                embed = discord.Embed()
-                embed.title = res.res['title']
-                embed.description = res.res[0]['body_text']
-                await channel.send(embed=embed)
+            if res.file == True:
+                try:
+                    time.sleep(3)
+                    await channel.send(file=discord.File(r'./xlsxwrite/report.xlsx'))
+                    # remove report from mem
+                    # if os.path.exists(r'./xlsxwrite/report.xlsx'):
+                    #     os.remove(r'./xlsxwrite/report.xlsx')
+                    # else:
+                    #     print('The file does not exist')
+                except Exception as e:
+                    print(e)
+                    await channel.send('There was an error retrieving the report')
             else:
                 await channel.send(res.res) # send the response
 

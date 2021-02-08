@@ -4,6 +4,8 @@ from bs4 import BeautifulSoup
 from urllib.request import urlopen
 from urllib.request import Request
 from urllib.error import HTTPError
+
+from xlsxwrite.sheet import getReport
 # from nltk.sentiment.vader import SentimentIntensityAnalyzer
 # from nltk.downloader import download
 # download('vader_lexicon')
@@ -12,8 +14,8 @@ from urllib.error import HTTPError
 def finvizReport(tickers):
     # perams
     print('getting report')
-    n = 1
-    embed_dict = {}
+    n = 6
+    ticker_dict = {}
     found = True
     tick_404 = []
     news_tables = {}
@@ -46,24 +48,23 @@ def finvizReport(tickers):
     for ticker in tickers:
         df = news_tables[ticker]
         df_tr = df.findAll('tr')
-        embed_dict[ticker] = []
-        embed_dict[ticker].append({'title': f'News for {ticker}'})
-        print(embed_dict)
-        body_text += f'**Recent News Headlines for {ticker}**: \n'
+        ticker_dict[ticker] = {}
+        print('Ticker dict',ticker_dict)
+        # body_text += f'**Recent News Headlines for {ticker}**: \n'
 
         for i, table_row in enumerate(df_tr):
             a_text = table_row.a.text
             a_link = table_row.a['href']
             td_text = table_row.td.text
             td_text = td_text.strip()
-            body_text += f"{a_text}, ({td_text}) " + f"*[link]({a_link})*"# TODO: use an embed object here!
+            cell_text = f"{a_text}, ({td_text})"
+            ticker_dict[ticker][cell_text] = a_link
+            
             if i == n-1:
-                body_text += '\n'
+                # body_text += '\n'
                 break
 
-        embed_dict[ticker].append({'body_text': body_text})
-
-    return embed_dict
+    getReport(ticker_dict) # make the report
 
     # except KeyError as e:
     #     print('error is:', e)
