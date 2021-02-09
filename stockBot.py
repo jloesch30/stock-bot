@@ -96,7 +96,7 @@ def main():
     load_dotenv()
     # login bot
     token = os.getenv("CLIENT_TOKEN")
-    client.run(str(token))
+    client.run("ODA1NTk3NjUwNTYwMDkwMTQz.YBdNRw.ANYo0gXiyW9G_5VTCcnQV66sGsQ")
 
 
 if __name__ == "__main__":
