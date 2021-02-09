@@ -18,8 +18,12 @@ def updateWatchList(db_user, option, ticks):
         WatchList.objects(user=db_user).update(add_to_set__tickers=ticks)
     elif option == 'remove':
         WatchList.objects(user=db_user).update(pull_all__tickers=ticks)
-        
+    elif option == 'r-all':
+        user_ticks = WatchList.objects.get(user=db_user)
+        tickers = user_ticks.tickers
+        WatchList.objects(user=db_user).update(pull_all__tickers=tickers)
 
+        
 def getUser(user_id):
     try:
         db_user = User.objects.get(u_id=user_id)

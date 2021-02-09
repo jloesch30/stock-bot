@@ -29,11 +29,22 @@ def watchCall(msg_content, user_id, username):
         return 'error'
 
     if option == 'add' or option == 'remove':
+        #TODO: Add a remove all fuunction
+        _all = False
         for i in range(len(msg_lst)):
             if ',' in msg_lst[i]:
                 msg_lst[i] = msg_lst[i].replace(',', '')
         tickers = msg_lst[2:]
-        res, tick = validateTickers(tickers)
+        # check if this is a single command
+        if len(tickers) == 1:
+            if tickers[0] == 'all':
+                option = 'r-all' # remove all
+                _all = True
+
+        if not _all:
+            res, tick = validateTickers(tickers)
+        else:
+            res = True
 
         # one of the tickers DNE
         if not res:
@@ -77,8 +88,11 @@ def watchCall(msg_content, user_id, username):
         return new_watch_obj
 
     elif option == 'news': # send a xlms report in a message
-        new_watch_obj.file = True
         tickers = getWatchList(db_user)
+        if len(tickers) == 0:
+            new_watch_obj.res = "You do not have any tickers, please add some using ($watch add <ticker>, <ticker>, ...)"
+            return new_watch_obj
+        new_watch_obj.file = True
         finvizReport(tickers) # create the report
         return new_watch_obj
         

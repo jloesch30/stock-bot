@@ -20,9 +20,12 @@ client = discord.Client()
 # ---------
 # functions
 # ---------
+
+
 @client.event
 async def on_ready():
     print(f"bot is ready, logged in as {client.user}")
+
 
 @client.event
 async def on_message(message):
@@ -47,6 +50,7 @@ async def on_message(message):
             print(e)
             await channel.send("Sorry, that command was invalid")
             return
+
     elif message.content.startswith('$watch'):
         # watch stocks
         msg_content = message.content
@@ -57,36 +61,35 @@ async def on_message(message):
             await channel.send(f"the user {username} does not exist, would you like to make one? [y/n]")
 
             def check(m):
-                return m.content == 'y'and m.channel == message.channel
+                return m.content == 'y' and m.channel == message.channel
 
             try:
                 msg = await client.wait_for('message', check=check, timeout=30.0)
             except TimeoutError:
-                await channel.send(f"The user {username} was not created due to timout or decline")
+                await channel.send(f"❌ The user {username} was not created due to timout or decline")
             else:
                 createUser(message.author.id, message.author)
                 await channel.send(f"creating user for {username}, you may now add items to your watch list.")
-        
+
         # successful call
         elif res != 'error':
             if res.file == True:
                 try:
-                    time.sleep(3)
-                    await channel.send(file=discord.File(r'./xlsxwrite/report.xlsx'))
-                    # remove report from mem
-                    # if os.path.exists(r'./xlsxwrite/report.xlsx'):
-                    #     os.remove(r'./xlsxwrite/report.xlsx')
-                    # else:
-                    #     print('The file does not exist')
+                    await channel.send(f"📈 Report for **{username}**", file=discord.File(r'./xlsxwrite/report.xlsx'))
+                    if os.path.exists(r'./xlsxwrite/report.xlsx'):
+                        os.remove(r'./xlsxwrite/report.xlsx')
+                    else:
+                        print('The file does not exist')
                 except Exception as e:
                     print(e)
-                    await channel.send('There was an error retrieving the report')
+                    await channel.send('💀 There was an error retrieving the report')
             else:
-                await channel.send(res.res) # send the response
+                await channel.send(res.res)  # send the response
 
         # unknown error
         else:
             await channel.send("There was an error, please make sure to keep your format such that:\n$watch <option> <tickers>")
+
 
 def main():
     # load .env
@@ -95,6 +98,6 @@ def main():
     token = os.getenv("CLIENT_TOKEN")
     client.run(str(token))
 
+
 if __name__ == "__main__":
     main()
-
