@@ -12,4 +12,5 @@ class User(Document):
     u_id = IntField(max_length=200, required=True, unique=True)
     user_name = StringField(max_length=200, required=True)
     watch_list = ReferenceField(WatchList)
+    admin = BooleanField(default=False, required=True)
     date_created = DateTimeField(default=datetime.datetime.utcnow)

@@ -35,7 +35,6 @@ def finvizReport(tickers):
         if found:
             html = BeautifulSoup(resp, features="lxml")
             news_table = html.find(id='news-table')
-            print('Ticker being inserted', ticker)
             news_tables[ticker] = news_table
 
     # remove bad tickers
@@ -49,7 +48,6 @@ def finvizReport(tickers):
         df = news_tables[ticker]
         df_tr = df.findAll('tr')
         ticker_dict[ticker] = {}
-        print('Ticker dict',ticker_dict)
         # body_text += f'**Recent News Headlines for {ticker}**: \n'
 
         for i, table_row in enumerate(df_tr):

@@ -27,7 +27,6 @@ def updateWatchList(db_user, option, ticks):
 def getUser(user_id):
     try:
         db_user = User.objects.get(u_id=user_id)
-        print(db_user.date_created)
     except Exception as e:
         print('User DNE')
         print('Creating user')
@@ -36,7 +35,6 @@ def getUser(user_id):
         return db_user
 
 def createUser(user_id, user_name):
-    print(type(user_id), type(user_name),user_name)
     new_watch_list = WatchList()
     new_user = User(
         u_id=user_id,

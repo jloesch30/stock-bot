@@ -2,6 +2,7 @@ import xlsxwriter
 
 
 def getReport(ticker_dict):
+    print('writing report')
     workbook = xlsxwriter.Workbook('./xlsxwrite/report.xlsx')
     worksheet = workbook.add_worksheet('ticker_reports')
 

@@ -5,11 +5,12 @@ from scrape.finviz import finvizReport
 
 
 class WatchResponse():
-    def __init__(self, dateTime=None, userName=None, res=None, file=False):
+    def __init__(self, dateTime=None, userName=None, res=None, file=False, admin_call=False):
         self.userName = userName
         self.res = res  # this will be a string that is sent
         self.dateTime = dateTime
         self.file = file
+        self.admin_call = admin_call
 
 
 def watchCall(msg_content, user_id, username):
@@ -95,4 +96,13 @@ def watchCall(msg_content, user_id, username):
         new_watch_obj.file = True
         finvizReport(tickers) # create the report
         return new_watch_obj
-        
+
+    elif option == 'all':
+        if db_user.admin == True:
+            new_watch_obj.admin_call = True
+            new_watch_obj.res = 'all'
+            return new_watch_obj
+        else:
+            print('returning false')
+            new_watch_obj.res = f"**{username}** is not an admin, please contact Vudly if this is a mistake"
+            return new_watch_obj

@@ -3,7 +3,7 @@ import os
 import time
 from asyncio import TimeoutError
 from dotenv import load_dotenv
-from mongoengine import connect
+import discord
 
 # --------------
 # module imports
@@ -11,15 +11,15 @@ from mongoengine import connect
 from watchlist.watch import watchCall
 from tickRequests.ticker import getTicker
 from database.crud import createUser
-
-# -----------------
-# discord bot setep
-# -----------------
-client = discord.Client()
+from sched.dailyReport import run_continuously
+from database.docs import User, WatchList
+from scrape.finviz import finvizReport
 
 # ---------
 # functions
 # ---------
+
+client = discord.Client()
 
 
 @client.event
@@ -36,7 +36,7 @@ async def on_message(message):
             response = getTicker(msg_content)
             if response == -1:
                 raise Exception
-            if response.option == 'ask':
+            if response.option == 'price':
                 await channel.send(f"{response.res.get('ticker')}: {response.res.get('ask')}")
             elif response.option == 'desc':
                 await channel.send(
@@ -73,7 +73,28 @@ async def on_message(message):
 
         # successful call
         elif res != 'error':
-            if res.file == True:
+            # TODO: admin sends all reports
+            if res.admin_call == True:
+                if res.res == 'all':
+                    watchlists = WatchList.objects
+                    for l in watchlists:
+                        user = l.user
+                        username = user.user_name
+                        tickers = l.tickers
+                        if len(tickers) != 0:
+                            finvizReport(tickers)
+                            # send the report
+                            await channel.send(f"📈 Report for **{username}**", file=discord.File(r'./xlsxwrite/report.xlsx'))
+                        else:
+                            await channel.send(f"👎 User **{username}** does not have any tickers registered")
+                    
+                    # delete files
+                    if os.path.exists(r'./xlsxwrite/report.xlsx'):
+                        os.remove(r'./xlsxwrite/report.xlsx')
+                    else:
+                        print('The file does not exist')
+
+            elif res.file == True:
                 try:
                     await channel.send(f"📈 Report for **{username}**", file=discord.File(r'./xlsxwrite/report.xlsx'))
                     if os.path.exists(r'./xlsxwrite/report.xlsx'):
@@ -89,6 +110,9 @@ async def on_message(message):
         # unknown error
         else:
             await channel.send("There was an error, please make sure to keep your format such that:\n$watch <option> <tickers>")
+
+# Start the background thread
+# stop_run_continuously = run_continuously(client)
 
 
 def main():
