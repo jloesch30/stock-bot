@@ -18,7 +18,7 @@ Currently in production, tags and releases will be used for changelogs and updat
 This bot can be run by creating a .env file with the respected information
 
 ### how to use
-command format:/
-'''$<command> <option> <OPTIONAL:tickers>
+command format:\
+'''$<command> <option> <OPTIONAL:tickers>'''
 1. $stock
   - 
