@@ -52,11 +52,11 @@ $watch price
 $stock price AAPL
 ```
 ```
-$watch desc AAPL
+$stock desc AAPL
 ```
 ```
-$watch high AAPL
+$stock high AAPL
 ```
 ```
-$watch low AAPL
+$stock low AAPL
 ```
