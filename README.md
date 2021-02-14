@@ -29,5 +29,5 @@ command format:\
   - all (admins)
   - news
   - add
-  - remove <all>
+  - remove *all*
   - list
