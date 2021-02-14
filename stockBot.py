@@ -120,7 +120,6 @@ def main():
     # load .env
     load_dotenv()
     # login bot
-    s3 = S3Connection(os.environ['CLIENT_TOKEN'])
     token = os.getenv("CLIENT_TOKEN")
     client.run(str(token))
 
