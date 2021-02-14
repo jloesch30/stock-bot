@@ -25,3 +25,9 @@ command format:\
   - desc
   - high
   - low
+2. $watch
+  - all (admins)
+  - news
+  - add
+  - remove <all>
+  - list
