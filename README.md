@@ -36,27 +36,36 @@ This bot can be run by creating a .env file with the respected information
 ```
 $watch list
 ```
+Returns a list of tickers in the User's watchlist
 ```
 $watch add AAPL, GOLD
 ```
+Adds designated tickers to the User's watchlist
 ```
 $watch remove AAPL, GOLD
 ```
+Removes designated tickers to the User's watchlist
 ```
 $watch news
 ```
+Returns an xlsx document with news for valid tickers in the User's watchlist
 ```
 $watch price
 ```
+Returns prices for each ticker in the User's watchlist
 ```
 $stock price AAPL
 ```
+Returns the price for a stock written after the option 'price'
 ```
 $stock desc AAPL
 ```
+Returns a short description of the stock indicated such as shoet name, high, low, open, sector, and website
 ```
 $stock high AAPL
 ```
+Returns the day high price for the stock
 ```
 $stock low AAPL
 ```
+Returns the day low price for the stock
