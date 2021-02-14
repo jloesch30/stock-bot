@@ -42,3 +42,21 @@ $watch add AAPL, GOLD
 ```
 $watch remove AAPL, GOLD
 ```
+```
+$watch news
+```
+```
+$watch price
+```
+```
+$stock price AAPL
+```
+```
+$watch desc AAPL
+```
+```
+$watch high AAPL
+```
+```
+$watch low AAPL
+```
