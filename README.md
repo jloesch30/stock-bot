@@ -19,6 +19,9 @@ This bot can be run by creating a .env file with the respected information
 
 ### how to use
 command format:\
-'''$<command> <option> <OPTIONAL:tickers>'''
+```$<command> <option> <OPTIONAL:tickers>```
 1. $stock
-  - 
+  - price
+  - desc
+  - high
+  - low
