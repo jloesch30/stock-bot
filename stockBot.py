@@ -11,7 +11,7 @@ import discord
 from watchlist.watch import watchCall
 from tickRequests.ticker import getTicker
 from database.crud import createUser
-from sched.dailyReport import run_continuously
+# from sched.dailyReport import run_continuously
 from database.docs import User, WatchList
 from scrape.finviz import finvizReport
 
@@ -58,7 +58,7 @@ async def on_message(message):
         username = message.author
         res = watchCall(msg_content, user_id, username)
         if res == 'userDNE':
-            await channel.send(f"the user {username} does not exist, would you like to make one? [y/n]")
+            await channel.send(f"the user **{username}** does not exist, would you like to make one? [y/n]")
 
             def check(m):
                 return m.content == 'y' and m.channel == message.channel
@@ -66,10 +66,10 @@ async def on_message(message):
             try:
                 msg = await client.wait_for('message', check=check, timeout=30.0)
             except TimeoutError:
-                await channel.send(f"❌ The user {username} was not created due to timout or decline")
+                await channel.send(f"❌ The user **{username}** was not created due to timout or decline")
             else:
                 createUser(message.author.id, message.author)
-                await channel.send(f"creating user for {username}, you may now add items to your watch list.")
+                await channel.send(f"creating user for **{username}**, you may now add items to your watch list.")
 
         # successful call
         elif res != 'error':
@@ -109,7 +109,7 @@ async def on_message(message):
 
         # unknown error
         else:
-            await channel.send("There was an error, please make sure to keep your format such that:\n$watch <option> <tickers>")
+            await channel.send("❌ There was an error, please make sure to keep your format such that:\n$watch <option> <tickers>")
 
 # Start the background thread
 # stop_run_continuously = run_continuously(client)

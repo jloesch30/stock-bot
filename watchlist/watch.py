@@ -15,7 +15,7 @@ class WatchResponse():
 
 def watchCall(msg_content, user_id, username):
     options = ['price', 'news', 'add', 'remove',
-               'list']  # TODO: impliment options
+               'list', 'all']  # TODO: impliment options
     msg_lst = msg_content.split(' ')
     db_user = getUser(user_id)
     if db_user == -1:
@@ -30,16 +30,23 @@ def watchCall(msg_content, user_id, username):
         return 'error'
 
     if option == 'add' or option == 'remove':
-        #TODO: Add a remove all fuunction
         _all = False
-        for i in range(len(msg_lst)):
-            if ',' in msg_lst[i]:
-                msg_lst[i] = msg_lst[i].replace(',', '')
+
+        # refine results
         tickers = msg_lst[2:]
+        if len(tickers) == 1:
+            item = tickers[0]
+            items_lst = item.split(',')
+            tickers = items_lst
+        else:
+            for i in range(len(tickers)):
+                if ',' in tickers[i]:
+                    tickers[i] = tickers[i].replace(',', '')
+
         # check if this is a single command
         if len(tickers) == 1:
             if tickers[0] == 'all':
-                option = 'r-all' # remove all
+                option = 'r-all'  # remove all
                 _all = True
 
         if not _all:
@@ -50,7 +57,7 @@ def watchCall(msg_content, user_id, username):
         # one of the tickers DNE
         if not res:
             print('Ticker DNE in the validateTickers call')
-            new_watch_obj.res = f"ticker {tick} DNE, please make sure the spelling is correct. For Cypto, you must include the currency (ex. -USD)"
+            new_watch_obj.res = f"ticker {tick} DNE, please make sure the spelling is correct.\nFor Cypto, you must include the currency (ex. -USD).\nTickers must be written with a comma seperation such as:\n*AAPL, GOLD*)"
             return new_watch_obj
 
         # validation passed
@@ -70,7 +77,7 @@ def watchCall(msg_content, user_id, username):
             return new_watch_obj
 
         # watchlist found
-        s = f'Ticker prices for {username}:\n'
+        s = f'Ticker prices for **{username}**:\n'
         for tick in tickers:
             p = getTickerPrice(tick)
             s += f'{tick}: {p}\n'
@@ -79,7 +86,7 @@ def watchCall(msg_content, user_id, username):
         return new_watch_obj
 
     elif option == 'list':
-        s = f'Tickers for {username}:\n'
+        s = f'Tickers for **{username}**:\n'
         tickers = getWatchList(db_user)
         for tick in tickers:
             s += tick + '\n'
@@ -88,13 +95,13 @@ def watchCall(msg_content, user_id, username):
 
         return new_watch_obj
 
-    elif option == 'news': # send a xlms report in a message
+    elif option == 'news':  # send a xlms report in a message
         tickers = getWatchList(db_user)
         if len(tickers) == 0:
             new_watch_obj.res = "You do not have any tickers, please add some using ($watch add <ticker>, <ticker>, ...)"
             return new_watch_obj
         new_watch_obj.file = True
-        finvizReport(tickers) # create the report
+        finvizReport(tickers)  # create the report
         return new_watch_obj
 
     elif option == 'all':
@@ -106,3 +113,5 @@ def watchCall(msg_content, user_id, username):
             print('returning false')
             new_watch_obj.res = f"**{username}** is not an admin, please contact Vudly if this is a mistake"
             return new_watch_obj
+    else:
+        return 'error'
