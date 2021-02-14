@@ -46,6 +46,10 @@ $watch remove AAPL, GOLD
 ```
 Removes designated tickers to the User's watchlist
 ```
+$watch remove all
+```
+Removes all tickers from the User's watchlist
+```
 $watch news
 ```
 Returns an xlsx document with news for valid tickers in the User's watchlist
