@@ -1,7 +1,7 @@
 # Discord stock-bot
 
 ### Description and uses
-This bot is being created for a private server to record and display stock information. The user can access various stock information such as price, highs, lows, news, etc. News for each stock is being compiled via webscraping and [Finviz](https://finviz.com/)
+This bot is being created for a private server to record and display stock information. The user can access various stock information such as price, highs, lows, news, etc. News for each stock is being compiled via webscraping and [Finviz](https://finviz.com/).
 
 ### features
 1. stock pricing
