@@ -18,16 +18,27 @@ Currently in production, tags and releases will be used for changelogs and updat
 This bot can be run by creating a .env file with the respected information
 
 ### how to use
-command format:\
+**command format**:\
 ```$<command> <option> <OPTIONAL:tickers>```
-1. $stock
+1. **$stock**
   - price
   - desc
   - high
   - low
-2. $watch
+2. **$watch**
   - all (admins)
   - news
   - add
   - remove *all*
   - list
+  
+### examples
+```
+$watch list
+```
+```
+$watch add AAPL, GOLD
+```
+```
+$watch remove AAPL, GOLD
+```
