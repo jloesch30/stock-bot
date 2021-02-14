@@ -9,9 +9,16 @@ This bot is being created for a private server to record and display stock infor
 3. private watchlists
 4. daily updates
 5. mongoDB
+6. sentiment analysis
 
 ### Progress
 Currently in production, tags and releases will be used for changelogs and updates
 
 ### run me
-currently in production
+This bot can be run by creating a .env file with the respected information
+
+### how to use
+command format:
+'''$<command> <option> <OPTIONAL:tickers>
+1. $stock
+  - 
