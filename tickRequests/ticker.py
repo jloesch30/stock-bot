@@ -7,7 +7,7 @@ class Response():
 
 
 def getTicker(message):
-    options = ['ask', 'desc', 'high', 'low']
+    options = ['price', 'desc', 'high', 'low']
     split_string = message.split(' ')
     try:
         option = split_string[1]
@@ -15,12 +15,13 @@ def getTicker(message):
         if option not in options:
             raise Exception
         tick_info = (yf.Ticker(tick.upper())).info
-        if option == 'ask':
+        if option == 'price':
             res = {
                 'ticker': tick,
-                'ask': tick_info.get('ask')
+                'price': tick_info.get('ask')
             }
-            new_response = Response('ask', res)
+            new_response = Response('price', res)
+            print(new_response.res)
             return new_response
         elif option == 'desc':
             res = {

@@ -15,7 +15,7 @@ class WatchResponse():
 
 def watchCall(msg_content, user_id, username):
     options = ['price', 'news', 'add', 'remove',
-               'list', 'all']  # TODO: impliment options
+               'list', 'all']
     msg_lst = msg_content.split(' ')
     db_user = getUser(user_id)
     if db_user == -1:

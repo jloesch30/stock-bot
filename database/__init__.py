@@ -1,9 +1,12 @@
 from mongoengine import connect
+from dotenv import load_dotenv
 import os
 
 # ----------
 # db connect
 # ----------
 print('Connecting to DB')
-connect('mydb', host="mongodb+srv://jloesch30:NkUB2z7wxRrDdmaI@cluster0.rkkey.mongodb.net/mydb?retryWrites=true&w=majority")
+load_dotenv()
+db_connect = os.getenv('DB_CONNECT_URL')
+connect('mydb', host=str(db_connect))
 print('Connection successful')

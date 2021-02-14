@@ -4,6 +4,8 @@ import time
 from asyncio import TimeoutError
 from dotenv import load_dotenv
 import discord
+from boto.s3.connection import S3Connection
+
 
 # --------------
 # module imports
@@ -11,7 +13,6 @@ import discord
 from watchlist.watch import watchCall
 from tickRequests.ticker import getTicker
 from database.crud import createUser
-# from sched.dailyReport import run_continuously
 from database.docs import User, WatchList
 from scrape.finviz import finvizReport
 
@@ -37,7 +38,7 @@ async def on_message(message):
             if response == -1:
                 raise Exception
             if response.option == 'price':
-                await channel.send(f"{response.res.get('ticker')}: {response.res.get('ask')}")
+                await channel.send(f"{response.res.get('ticker')}: {response.res.get('price')}")
             elif response.option == 'desc':
                 await channel.send(
                     f"Name: {response.res.get('shortName')}\nSector: {response.res.get('sector')}\nOpen: {response.res.get('open')}\nDay Low: {response.res.get('dayLow')}\nDay High: {response.res.get('dayHigh')}\nWebsite: {response.res.get('website')}"
@@ -119,6 +120,7 @@ def main():
     # load .env
     load_dotenv()
     # login bot
+    s3 = S3Connection(os.environ['CLIENT_TOKEN'], os.environ['DB_CONNECT_URL'])
     token = os.getenv("CLIENT_TOKEN")
     client.run(str(token))
 
